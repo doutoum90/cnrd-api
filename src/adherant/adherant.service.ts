@@ -11,6 +11,7 @@ export class AdherantService {
     @InjectModel(Adherant.name)
     private readonly adherantModel: Model<AdherantDocument>,
   ) {}
+
   create(createAdherantDto: CreateAdherantDto) {
     return new this.adherantModel(createAdherantDto).save();
   }
@@ -20,14 +21,14 @@ export class AdherantService {
   }
 
   async findOne(id: string) {
-    return this.adherantModel.findById(id);
+    return this.adherantModel.findById(id).exec();
   }
 
   update(id: string, updateAdherantDto: UpdateAdherantDto) {
-    return this.adherantModel.findByIdAndUpdate(id, updateAdherantDto);
+    return this.adherantModel.findByIdAndUpdate(id, updateAdherantDto).exec();
   }
 
   remove(_id: string) {
-    return this.adherantModel.deleteOne({ _id });
+    return this.adherantModel.deleteOne({ _id }).exec();
   }
 }

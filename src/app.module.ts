@@ -6,6 +6,7 @@ import { UsersModule } from './users/users.module';
 import { AdherantModule } from './adherant/adherant.module';
 import { ArticlesModule } from './articles/articles.module';
 import { CategoriesModule } from './categories/categories.module';
+import { MembersModule } from './members/members.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { CategoriesModule } from './categories/categories.module';
     AdherantModule,
     ArticlesModule,
     CategoriesModule,
+    MembersModule,
   ],
   controllers: [AppController],
   providers: [AppService],

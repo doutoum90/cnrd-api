@@ -19,15 +19,15 @@ export class UsersService {
     return new this.userModel(data).save();
   }
 
-  async getUser(_id: number): Promise<User> {
+  async getUser(_id: string): Promise<User> {
     return this.userModel.findById(_id).exec();
   }
 
-  async updateUser(id: number, data: UpdateUserDto): Promise<any> {
-    this.userModel.findByIdAndUpdate(id, data);
+  async updateUser(id: string, data: UpdateUserDto): Promise<any> {
+    return this.userModel.findByIdAndUpdate(id, data).exec();
   }
 
-  async deleteUser(id: number): Promise<any> {
-    return this.userModel.findByIdAndDelete(id);
+  async deleteUser(id: string): Promise<any> {
+    return this.userModel.findByIdAndDelete(id).exec();
   }
 }

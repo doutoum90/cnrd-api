@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -21,8 +22,22 @@ export class ArticlesController {
   }
 
   @Get()
-  findAll() {
-    return this.articlesService.findAll();
+  async findAll(@Query('crit') crit: string) {
+    switch (crit) {
+      case 'une': {
+        return await this.articlesService.findAllUne();
+      }
+      case 'nonArchived': {
+        return await this.articlesService.findAllNonArchived();
+      }
+
+      case 'archived': {
+        return await this.articlesService.findAllArchived();
+      }
+      default: {
+        return await this.articlesService.findAll();
+      }
+    }
   }
 
   @Get(':id')

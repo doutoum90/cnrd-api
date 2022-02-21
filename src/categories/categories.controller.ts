@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -21,8 +22,19 @@ export class CategoriesController {
   }
 
   @Get()
-  async findAll() {
-    return await this.categoriesService.findAll();
+  async findAll(@Query('crit') crit: string) {
+    console.log(crit);
+    switch (crit) {
+      case 'archived': {
+        return await this.categoriesService.findAllArchived();
+      }
+      case 'nonArchived': {
+        return await this.categoriesService.findAllNonArchived();
+      }
+      default: {
+        return await this.categoriesService.findAll();
+      }
+    }
   }
 
   @Get(':id')

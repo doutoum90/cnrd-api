@@ -13,22 +13,35 @@ export class CategoriesService {
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
-    return this.categoryModel.create(createCategoryDto);
+    return new this.categoryModel(createCategoryDto).save();
   }
 
   async findAll() {
-    return this.categoryModel.find();
+    return this.categoryModel.find().exec();
+  }
+  async findAllArchived() {
+    console.log('no ar');
+    return this.categoryModel
+      .find({ isArchived: { $in: ['true', true] } })
+      .exec();
+  }
+
+  async findAllNonArchived() {
+    console.log('ar')
+    return this.categoryModel
+      .find({ isArchived: { $in: ['false', false, undefined] } })
+      .exec();
   }
 
   async findOne(id: string) {
-    return this.categoryModel.findById(id);
+    return this.categoryModel.findById(id).exec();
   }
 
   async update(id: string, updateCategoryDto: UpdateCategoryDto) {
-    return this.categoryModel.findByIdAndUpdate(id, updateCategoryDto);
+    return this.categoryModel.findByIdAndUpdate(id, updateCategoryDto).exec();
   }
 
   async remove(_id: string) {
-    return this.categoryModel.deleteOne({ _id });
+    return this.categoryModel.deleteOne({ _id }).exec();
   }
 }
