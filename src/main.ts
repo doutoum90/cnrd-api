@@ -1,11 +1,21 @@
 import { NestFactory } from '@nestjs/core';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
-
+ 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { bodyParser: false });
+  const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: 'http://localhost:4200',
   });
+
+  const option = new DocumentBuilder()
+    .setTitle('CNRD')
+    .setDescription("Documentation de l'api")
+    .setVersion('1.0')
+    .addTag('CNRD')
+    .build();
+  const docume = SwaggerModule.createDocument(app, option);
+  SwaggerModule.setup('docs', app, docume);
   await app.listen(3001);
 }
 bootstrap();

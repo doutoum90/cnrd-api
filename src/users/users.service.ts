@@ -1,55 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as serviceAccount from '../cnrd.json';
+import { User, UserDocument } from './entities/user.entity';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class UsersService {
-  db;
-  userRef;
-  userChild;
-  constructor() {
-    // const serviceAccount = require('./firebase/cnrd-df83c-firebase-adminsdk-suagu-348b8b4486.json');
-    const admin = require('firebase-admin');
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+  constructor(
+    @InjectModel(User.name)
+    private readonly userModel: Model<UserDocument>,
+  ) {}
 
-      authDomain: 'cnrd-df83c.firebaseapp.com',
-      databaseURL:
-        'https://cnrd-df83c-default-rtdb.europe-west1.firebasedatabase.app/',
-    });
-    this.db = admin.database();
-    this.userRef = this.db.ref('users');
+  async all(): Promise<User[]> {
+    return this.userModel.find().exec();
   }
 
-  create(createUserDto: CreateUserDto) {
-    const userRef = this.userRef;
-    console.log(createUserDto);
-    if (createUserDto) {
-      return this.userRef
-        .child(createUserDto?.id)
-        .set({ nom: createUserDto?.nom, prenom: createUserDto?.prenom })
-        .then(function () {
-          return userRef.once('value');
-        });
-    } else {
-      return 'Valeur incorrecte aussi';
-    }
+  async create(data): Promise<User> {
+    return new this.userModel(data).save();
   }
 
-  findAll() {
-    return this.userRef.once('value');
+  async getUser(_id: number): Promise<User> {
+    return this.userModel.findById(_id).exec();
   }
 
-  findOne(id: number) {
-    return this.db.ref(`users/${id}`).once('value');
+  async updateUser(id: number, data: UpdateUserDto): Promise<any> {
+    this.userModel.findByIdAndUpdate(id, data);
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async deleteUser(id: number): Promise<any> {
+    return this.userModel.findByIdAndDelete(id);
   }
 }

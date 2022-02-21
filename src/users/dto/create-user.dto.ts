@@ -1,5 +1,4 @@
 export class CreateUserDto {
-  id?: string;
   nom?: string;
   prenom?: string;
   dateNaissance?: Date;
