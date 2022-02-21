@@ -27,7 +27,7 @@ export class CategoriesService {
   }
 
   async findAllNonArchived() {
-    console.log('ar')
+    console.log('ar');
     return this.categoryModel
       .find({ isArchived: { $in: ['false', false, undefined] } })
       .exec();

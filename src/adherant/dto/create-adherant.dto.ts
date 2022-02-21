@@ -15,7 +15,6 @@ export class CreateAdherantDto {
   cotisation: Cotisation;
 }
 
-
 export interface Cotisation {
   libelle: string;
   montant: number;

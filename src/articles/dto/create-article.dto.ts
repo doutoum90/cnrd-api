@@ -1,5 +1,5 @@
 export class CreateArticleDto {
-    title: string;
+  title: string;
   isArchived: boolean;
   isAlaUne: boolean;
   content: string;
