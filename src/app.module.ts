@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { AdherantModule } from './adherant/adherant.module';
+import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { AdherantModule } from './adherant/adherant.module';
     }),
     UsersModule,
     AdherantModule,
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
