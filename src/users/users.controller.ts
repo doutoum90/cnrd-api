@@ -23,9 +23,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get()
   async findAll() {
-    console.log();
-    return 'test';
-    // return await this.usersService.all();
+    return await this.usersService.all();
   }
 
   @Post()
