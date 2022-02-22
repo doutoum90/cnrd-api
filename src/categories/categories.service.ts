@@ -20,14 +20,12 @@ export class CategoriesService {
     return this.categoryModel.find().exec();
   }
   async findAllArchived() {
-    console.log('no ar');
     return this.categoryModel
       .find({ isArchived: { $in: ['true', true] } })
       .exec();
   }
 
   async findAllNonArchived() {
-    console.log('ar');
     return this.categoryModel
       .find({ isArchived: { $in: ['false', false, undefined] } })
       .exec();

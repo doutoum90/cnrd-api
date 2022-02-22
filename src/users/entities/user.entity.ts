@@ -18,7 +18,7 @@ export class User {
   @Prop()
   motDePasse?: string;
   @Prop()
-  roles?: string[];
+  roles?: string;
   @Prop()
   userName?: string;
   @Prop()

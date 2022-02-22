@@ -7,6 +7,7 @@ import { ArticlesModule } from './articles/articles.module';
 import { CategoriesModule } from './categories/categories.module';
 import { MembersModule } from './members/members.module';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ConfigModule } from '@nestjs/config';
     ArticlesModule,
     CategoriesModule,
     MembersModule,
+    AuthModule,
   ],
   controllers: [AppController],
 })

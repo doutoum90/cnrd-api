@@ -23,6 +23,10 @@ export class UsersService {
     return this.userModel.findById(_id).exec();
   }
 
+  async getUserByUserName(userName: string): Promise<User> {
+    return this.userModel.findOne({userName}).exec();
+  }
+
   async updateUser(id: string, data: UpdateUserDto): Promise<any> {
     return this.userModel.findByIdAndUpdate(id, data).exec();
   }
