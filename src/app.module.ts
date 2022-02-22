@@ -7,9 +7,11 @@ import { AdherantModule } from './adherant/adherant.module';
 import { ArticlesModule } from './articles/articles.module';
 import { CategoriesModule } from './categories/categories.module';
 import { MembersModule } from './members/members.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot(),
     MongooseModule.forRootAsync({
       useFactory: () => ({
         uri:
