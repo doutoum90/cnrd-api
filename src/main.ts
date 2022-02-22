@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors({
-    origin: ['http://localhost:4200', 'https://cnrd-front.herokuapp.com'],
+    origin: [process.env.FRONT_LOCAL_URL, process.env.FRONT_URL],
   });
 
   const option = new DocumentBuilder()
