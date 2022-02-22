@@ -12,7 +12,9 @@ import { MembersModule } from './members/members.module';
   imports: [
     MongooseModule.forRootAsync({
       useFactory: () => ({
-        uri: 'mongodb+srv://cnrd:eLRVbWJ3blVipuc7@cnrddb.bhvkq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
+        uri:
+          process.env.MONGO_URL ||
+          'mongodb+srv://cnrd:eLRVbWJ3blVipuc7@cnrddb.bhvkq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
       }),
     }),
     UsersModule,
