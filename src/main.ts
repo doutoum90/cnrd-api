@@ -7,6 +7,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
   app.enableCors({
     origin: [process.env.FRONT_LOCAL_URL, process.env.FRONT_URL],
+    allowedHeaders:
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
+    methods: 'GET,PUT,POST,PATCH,DELETE,UPDATE,OPTIONS',
   });
 
   const option = new DocumentBuilder()
