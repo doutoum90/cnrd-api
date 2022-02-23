@@ -12,6 +12,13 @@ export class CreateArticleDto {
   documents?: any[];
   cats: string[];
   commentaires?: Commentaire[];
+  auteur: Auteur;
+}
+
+export interface Auteur {
+  nom: string;
+  prenom: string;
+  photo: string;
 }
 export interface Commentaire {
   _id: string;

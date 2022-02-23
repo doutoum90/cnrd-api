@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
@@ -22,6 +22,14 @@ export class Category {
   dateModification?: Date;
   @Prop()
   idUser: string;
+  @Prop(
+    raw({
+      nom: { type: String },
+      prenom: { type: String },
+      photo: { type: String },
+    }),
+  )
+  auteur: Record<string, any>;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

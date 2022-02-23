@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
 
@@ -30,13 +30,19 @@ export class Article {
   documents?: any[];
   @Prop([String])
   cats: string[];
-  @Prop()
+  @Prop(
+    raw({
+      nom: { type: String },
+      prenom: { type: String },
+      photo: { type: String },
+    }),
+  )
+  auteur: Record<string, any>;
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commentaire' }],
   })
   commentaires?: Commentaire[];
-}
-// new mongoose.Schema({})
+} 
 @Schema()
 export class Commentaire {
   @Prop()
