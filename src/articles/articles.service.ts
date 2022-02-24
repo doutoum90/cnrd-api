@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article, ArticleDocument } from './entities/article.entity';
-import { Model, FilterQuery } from 'mongoose';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
+import { Pagination } from 'src/paginate.models';
 
 @Injectable()
 export class ArticlesService {
@@ -16,32 +17,45 @@ export class ArticlesService {
     return new this.articleModel(createArticleDto).save();
   }
 
-  async findByKeyWord(searchQuery?: string) {
-    const arts = await this.articleModel.find({
-      $text: {
-        $search: searchQuery || '',
-      },
-    });
-    
+  async findByKeyWord(searchQuery: string, pagination: Pagination) {
+    const arts = await this.articleModel
+      .find({
+        $text: {
+          $search: searchQuery || '',
+        },
+      })
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1));
     return arts;
   }
 
-  findAllUne() {
-    return this.articleModel.find({ isAlaUne: { $in: ['true', true] } }).exec();
+  findAllUne(pagination: Pagination) {
+    return this.articleModel
+      .find({ isAlaUne: { $in: ['true', true] } })
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1));
   }
-  findAllArchived() {
+  findAllArchived(pagination: Pagination) {
     return this.articleModel
       .find({ isArchived: { $in: ['true', true] } })
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1))
       .exec();
   }
-  findAllNonArchived() {
+  findAllNonArchived(pagination: Pagination) {
     return this.articleModel
       .find({ isArchived: { $in: ['false', false, undefined] } })
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1))
       .exec();
   }
 
-  findAll() {
-    return this.articleModel.find().exec();
+  findAll(pagination: Pagination) {
+    return this.articleModel
+      .find()
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1))
+      .exec();
   }
 
   findOne(id: string) {

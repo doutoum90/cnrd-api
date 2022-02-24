@@ -8,8 +8,10 @@ import {
   Delete,
   Query,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { Pagination } from 'src/paginate.models';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
@@ -23,27 +25,29 @@ export class ArticlesController {
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articlesService.create(createArticleDto);
   }
-  
+
   @Get('search')
-  async findByKeyWord(@Query('term') term: string) {
-    return this.articlesService.findByKeyWord(term);
+  async findByKeyWord(@Query('term') term: string, @Headers() headers: any) {
+    const pagination: Pagination = JSON.parse(headers.pagination);
+    return this.articlesService.findByKeyWord(term, pagination);
   }
 
   @Get()
-  async findAll(@Query('crit') crit: string) {
+  async findAll(@Query('crit') crit: string, @Headers() headers: any) {
+    const pagination: Pagination = JSON.parse(headers?.pagination);
     switch (crit) {
       case 'une': {
-        return await this.articlesService.findAllUne();
+        return await this.articlesService.findAllUne(pagination);
       }
       case 'nonArchived': {
-        return await this.articlesService.findAllNonArchived();
+        return await this.articlesService.findAllNonArchived(pagination);
       }
 
       case 'archived': {
-        return await this.articlesService.findAllArchived();
+        return await this.articlesService.findAllArchived(pagination);
       }
       default: {
-        return await this.articlesService.findAll();
+        return await this.articlesService.findAll(pagination);
       }
     }
   }
