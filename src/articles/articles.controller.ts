@@ -23,6 +23,11 @@ export class ArticlesController {
   create(@Body() createArticleDto: CreateArticleDto) {
     return this.articlesService.create(createArticleDto);
   }
+  
+  @Get('search')
+  async findByKeyWord(@Query('term') term: string) {
+    return this.articlesService.findByKeyWord(term);
+  }
 
   @Get()
   async findAll(@Query('crit') crit: string) {

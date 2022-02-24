@@ -42,7 +42,7 @@ export class Article {
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commentaire' }],
   })
   commentaires?: Commentaire[];
-} 
+}
 @Schema()
 export class Commentaire {
   @Prop()
@@ -55,4 +55,7 @@ export class Commentaire {
   auteur: string;
 }
 
-export const ArticleSchema = SchemaFactory.createForClass(Article);
+export const ArticleSchema = SchemaFactory.createForClass(Article).index({
+  title: 'text',
+  content: 'text',
+});

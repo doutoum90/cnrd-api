@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article, ArticleDocument } from './entities/article.entity';
-import { Model } from 'mongoose';
+import { Model, FilterQuery } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -14,6 +14,16 @@ export class ArticlesService {
 
   create(createArticleDto: CreateArticleDto) {
     return new this.articleModel(createArticleDto).save();
+  }
+
+  async findByKeyWord(searchQuery?: string) {
+    const arts = await this.articleModel.find({
+      $text: {
+        $search: searchQuery || '',
+      },
+    });
+    
+    return arts;
   }
 
   findAllUne() {

@@ -13,13 +13,13 @@ export class User {
 
   @Prop()
   dateNaissance?: Date;
-  @Prop()
+  @Prop({ unique: true })
   email?: string;
   @Prop()
   motDePasse?: string;
   @Prop()
   roles?: string;
-  @Prop()
+  @Prop({ unique: true })
   userName?: string;
   @Prop()
   phone?: string;
