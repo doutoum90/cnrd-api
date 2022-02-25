@@ -57,6 +57,12 @@ export class ArticlesController {
     }
   }
 
+  @Get('cats/:id')
+  async getArticleByCat(@Param('id') id: string, @Headers() headers: any) {
+    const pagination: Pagination = JSON.parse(headers?.pagination);
+    return await this.articlesService.getArticleByCat(id, pagination);
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.articlesService.findOne(id);

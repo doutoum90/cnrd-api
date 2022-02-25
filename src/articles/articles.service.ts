@@ -33,7 +33,9 @@ export class ArticlesService {
     const newArticle = await new this.articleModel(createArticleDto);
     // set categories
     createArticleDto.categories.map(async (cat) =>
-      newArticle.categories.push(await this.categoryModel.findOne({libelles: cat})),
+      newArticle.categories.push(
+        await this.categoryModel.findOne({ libelles: cat }),
+      ),
     );
     // set auteur
     const auteur = await this.userModel
@@ -44,27 +46,6 @@ export class ArticlesService {
     return await newArticle.save();
   }
 
-  async findByKeyWord(searchQuery: string, pagination: Pagination) {
-    const option = {
-      $or: [
-        { title: new RegExp(searchQuery.toString(), 'i') },
-        { content: new RegExp(searchQuery.toString(), 'i') },
-      ],
-    };
-    const data = await this.articleModel
-      .find(option)
-      .limit(pagination.limit)
-      .skip(pagination.page_size * (pagination.offset - 1));
-
-    const total = await this.articleModel.count(option).exec();
-    return {
-      data,
-      total,
-      offset: pagination.offset,
-      last_page: Math.ceil(total / pagination.limit),
-    };
-  }
-
   async comment(articleId: string, comm: CommentaireDto) {
     const commentaire = await new this.commentModel(comm).save();
     const article = await this.articleModel.findById(articleId);
@@ -72,77 +53,39 @@ export class ArticlesService {
     return await article.save();
   }
 
+  async findByKeyWord(searchQuery: string, pagination: Pagination) {
+    const options = {
+      $or: [
+        { title: new RegExp(searchQuery.toString(), 'i') },
+        { content: new RegExp(searchQuery.toString(), 'i') },
+      ],
+    };
+    return await this.getArticleBulk(options, pagination);
+  }
+  
+  async getArticleByCat(id, pagination) {
+    const options = {
+      categories: id,
+    };
+    return await this.getArticleBulk(options, pagination);
+  }
+
   async findAllUne(pagination: Pagination) {
     const options = { isAlaUne: { $in: ['true', true] } };
-    const data = await this.articleModel
-      .find(options)
-      .populate('auteurs')
-      .populate('commentaires')
-      .populate('categories')
-      .limit(pagination.limit)
-      .skip(pagination.page_size * (pagination.offset - 1));
-    const total = await this.articleModel.count(options).exec();
-    return {
-      data,
-      total,
-      offset: pagination.offset,
-      last_page: Math.ceil(total / pagination.limit),
-    };
+    return await this.getArticleBulk(options, pagination);
   }
 
   async findAllArchived(pagination: Pagination) {
     const options = { isArchived: { $in: ['true', true] } };
-    const data = await this.articleModel
-      .find(options)
-      .populate('auteurs')
-      .populate('commentaires')
-      .populate('categories')
-      .limit(pagination.limit)
-      .skip(pagination.page_size * (pagination.offset - 1))
-      .exec();
-    const total = await this.articleModel.count(options).exec();
-    return {
-      data,
-      total,
-      offset: pagination.offset,
-      last_page: Math.ceil(total / pagination.limit),
-    };
+    return await this.getArticleBulk(options, pagination);
   }
   async findAllNonArchived(pagination: Pagination) {
     const options = { isArchived: { $in: ['false', false, undefined] } };
-    const data = await this.articleModel
-      .find(options)
-      .populate('auteurs')
-      .populate('commentaires')
-      .populate('categories')
-      .limit(pagination.limit)
-      .skip(pagination.page_size * (pagination.offset - 1))
-      .exec();
-    const total = await this.articleModel.count(options).exec();
-    return {
-      data,
-      total,
-      offset: pagination.offset,
-      last_page: Math.ceil(total / pagination.limit),
-    };
+    return await this.getArticleBulk(options, pagination);
   }
 
   async findAll(pagination: Pagination) {
-    const data = await this.articleModel
-      .find()
-      .limit(pagination.limit)
-      .skip(pagination.page_size * (pagination.offset - 1))
-      .populate('auteurs')
-      .populate('commentaires')
-      .populate('categories')
-      .exec();
-    const total = await this.articleModel.count().populate('categories').exec();
-    return {
-      data,
-      total,
-      offset: pagination.offset,
-      last_page: Math.ceil(total / pagination.limit),
-    };
+    return await this.getArticleBulk({}, pagination);
   }
 
   findOne(id: string) {
@@ -159,6 +102,23 @@ export class ArticlesService {
 
   remove(_id: string) {
     return this.articleModel.deleteOne({ _id }).exec();
+  }
+
+  async getArticleBulk(options, pagination) {
+    const data = await this.articleModel
+      .find(options)
+      .populate('auteurs')
+      .populate('commentaires')
+      .populate('categories')
+      .limit(pagination.limit)
+      .skip(pagination.page_size * (pagination.offset - 1));
+    const total = await this.articleModel.count(options).exec();
+    return {
+      data,
+      total,
+      offset: pagination.offset,
+      last_page: Math.ceil(total / pagination.limit),
+    };
   }
 }
 
