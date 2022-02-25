@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './entities/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
@@ -24,11 +24,24 @@ export class UsersService {
   }
 
   async getUserByUserName(userName: string): Promise<User> {
-    return this.userModel.findOne({userName}).exec();
+    return this.userModel.findOne({ userName }).exec();
   }
 
   async updateUser(id: string, data: UpdateUserDto): Promise<any> {
     return this.userModel.findByIdAndUpdate(id, data).exec();
+  }
+
+  async updateUserPassword(id: string, data: UpdateUserDto): Promise<any> {
+    const user = await this.userModel.findById(id);
+    if (user?.motDePasse === data?.oldPassword) {
+      delete data.oldPassword;
+      this.updateUser(id, data);
+    } else {
+      throw new HttpException(
+        'Le mot de passe saisi ne correspond pas à votre mot de passe',
+        HttpStatus.NOT_FOUND,
+      );
+    }
   }
 
   async deleteUser(id: string): Promise<any> {

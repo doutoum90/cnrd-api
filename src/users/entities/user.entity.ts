@@ -33,6 +33,10 @@ export class User {
   photo?: string;
   @Prop()
   dateModification?: Date;
+  @Prop()
+  adresse?: string;
+  @Prop()
+  bio?: string;
 
   @Prop({
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },

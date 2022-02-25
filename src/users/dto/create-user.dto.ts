@@ -6,10 +6,13 @@ export class CreateUserDto {
   motDePasse?: string;
   roles?: string;
   userName?: string;
+  oldPassword?: string;
   phone?: string;
   isActive?: boolean;
   genre?: string;
   dateCreation?: Date;
   photo?: string;
   dateModification?: Date;
+  adresse?: string;
+  bio?: string
 }
