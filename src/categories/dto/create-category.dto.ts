@@ -1,3 +1,5 @@
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+
 export class CreateCategoryDto {
   title: string;
   libelles: string;
@@ -7,11 +9,5 @@ export class CreateCategoryDto {
   isArchived: boolean;
   dateModification?: Date;
   idUser: string;
-  auteur: Auteur;
-}
-
-export interface Auteur {
-  nom: string;
-  prenom: string;
-  photo: string;
+  auteur: CreateUserDto;
 }

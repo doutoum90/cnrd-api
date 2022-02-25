@@ -1,6 +1,7 @@
 import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
 
 export type CategoryDocument = Category & Document;
 
@@ -20,16 +21,10 @@ export class Category {
   isArchived: boolean;
   @Prop()
   dateModification?: Date;
-  @Prop()
-  idUser: string;
-  @Prop(
-    raw({
-      nom: { type: String },
-      prenom: { type: String },
-      photo: { type: String },
-    }),
-  )
-  auteur: Record<string, any>;
+  @Prop({
+    type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  })
+  auteur: CreateUserDto;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

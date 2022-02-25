@@ -32,6 +32,11 @@ export class ArticlesController {
     return this.articlesService.findByKeyWord(term, pagination);
   }
 
+  @Patch(':id')
+  async comment(@Param('id') id: string, @Body() comm: any) {
+    return await this.articlesService.comment(id, comm);
+  }
+
   @Get()
   async findAll(@Query('crit') crit: string, @Headers() headers: any) {
     const pagination: Pagination = JSON.parse(headers?.pagination);

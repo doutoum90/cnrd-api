@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
 
 export type UserDocument = User & Document;
 
@@ -10,7 +12,6 @@ export class User {
   nom: string;
   @Prop()
   prenom: string;
-
   @Prop()
   dateNaissance?: Date;
   @Prop({ unique: true })
@@ -33,6 +34,11 @@ export class User {
   photo?: string;
   @Prop()
   dateModification?: Date;
+  
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
+  })
+  articles: CreateArticleDto[];
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

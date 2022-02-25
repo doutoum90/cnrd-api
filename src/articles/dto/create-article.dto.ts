@@ -1,3 +1,6 @@
+import { CreateCategoryDto } from 'src/categories/dto/create-category.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+
 export class CreateArticleDto {
   title: string;
   isArchived: boolean;
@@ -10,20 +13,15 @@ export class CreateArticleDto {
   dateAlaUne?: Date;
   icon: string;
   documents?: any[];
-  cats: string[];
-  commentaires?: Commentaire[];
-  auteur: Auteur;
+  categories: CreateCategoryDto[];
+  commentaires?: CommentaireDto[];
+  auteur: CreateUserDto;
 }
 
-export interface Auteur {
-  nom: string;
-  prenom: string;
-  photo: string;
-}
-export interface Commentaire {
-  _id: string;
+export interface CommentaireDto {
   content: string;
   datePublication: Date;
-  dateModification?: Date;
-  auteur: string;
+  article: CreateArticleDto;
+  nom: string;
+  mail: string;
 }

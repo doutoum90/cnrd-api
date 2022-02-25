@@ -1,8 +1,12 @@
-import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
+import { CreateCategoryDto } from 'src/categories/dto/create-category.dto';
+import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { CommentaireDto, CreateArticleDto } from '../dto/create-article.dto';
 
 export type ArticleDocument = Article & Document;
+export type CommentaireDocument = Commentaire & Document;
 
 @Schema()
 export class Article {
@@ -28,20 +32,20 @@ export class Article {
   icon: string;
   @Prop()
   documents?: any[];
-  @Prop([String])
-  cats: string[];
-  @Prop(
-    raw({
-      nom: { type: String },
-      prenom: { type: String },
-      photo: { type: String },
-    }),
-  )
-  auteur: Record<string, any>;
+  @Prop({
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
+  })
+  categories: CreateCategoryDto[];
+
+  @Prop({
+    type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  })
+  auteur: CreateUserDto;
+
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commentaire' }],
   })
-  commentaires?: Commentaire[];
+  commentaires?: CommentaireDto[];
 }
 @Schema()
 export class Commentaire {
@@ -50,11 +54,16 @@ export class Commentaire {
   @Prop()
   datePublication: Date;
   @Prop()
-  dateModification?: Date;
+  nom: string;
   @Prop()
-  auteur: string;
+  mail: string;
+  @Prop({
+    type: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
+  })
+  article: CreateArticleDto;
 }
 
+export const CommentaireSchema = SchemaFactory.createForClass(Commentaire);
 export const ArticleSchema = SchemaFactory.createForClass(Article).index({
   title: 'text',
   content: 'text',

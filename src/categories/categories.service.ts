@@ -17,7 +17,7 @@ export class CategoriesService {
   }
 
   async findAll() {
-    return this.categoryModel.find().exec();
+    return this.categoryModel.find().populate('auteur');
   }
   async findAllArchived() {
     return this.categoryModel
