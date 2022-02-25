@@ -33,17 +33,15 @@ export class ArticlesService {
     const newArticle = await new this.articleModel(createArticleDto);
     // set categories
     createArticleDto.categories.map(async (cat) =>
-      newArticle.categories.push(await this.categoryModel.findById(cat)),
+      newArticle.categories.push(await this.categoryModel.findOne({libelles: cat})),
     );
     // set auteur
     const auteur = await this.userModel
       .findOne({ _id: createArticleDto?.auteur })
       .exec();
+    newArticle.auteurs.push(auteur);
 
-    console.log('auteur', auteur);
-    newArticle.auteur = auteur?._id;
-    console.log('auteur', newArticle.auteur);
-    return newArticle.save();
+    return await newArticle.save();
   }
 
   async findByKeyWord(searchQuery: string, pagination: Pagination) {
@@ -78,7 +76,7 @@ export class ArticlesService {
     const options = { isAlaUne: { $in: ['true', true] } };
     const data = await this.articleModel
       .find(options)
-      .populate('auteur')
+      .populate('auteurs')
       .populate('commentaires')
       .populate('categories')
       .limit(pagination.limit)
@@ -96,7 +94,7 @@ export class ArticlesService {
     const options = { isArchived: { $in: ['true', true] } };
     const data = await this.articleModel
       .find(options)
-      .populate('auteur')
+      .populate('auteurs')
       .populate('commentaires')
       .populate('categories')
       .limit(pagination.limit)
@@ -114,7 +112,7 @@ export class ArticlesService {
     const options = { isArchived: { $in: ['false', false, undefined] } };
     const data = await this.articleModel
       .find(options)
-      .populate('auteur')
+      .populate('auteurs')
       .populate('commentaires')
       .populate('categories')
       .limit(pagination.limit)
@@ -134,7 +132,7 @@ export class ArticlesService {
       .find()
       .limit(pagination.limit)
       .skip(pagination.page_size * (pagination.offset - 1))
-      .populate('auteur')
+      .populate('auteurs')
       .populate('commentaires')
       .populate('categories')
       .exec();
@@ -150,13 +148,12 @@ export class ArticlesService {
   findOne(id: string) {
     return this.articleModel
       .findById(id)
-      .populate('auteur')
+      .populate('auteurs')
       .populate('commentaires')
       .populate('categories');
   }
 
   update(id: string, updateArticleDto: UpdateArticleDto) {
-    console.log(updateArticleDto);
     return this.articleModel.findByIdAndUpdate(id, updateArticleDto).exec();
   }
 

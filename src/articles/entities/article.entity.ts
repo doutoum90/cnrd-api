@@ -35,9 +35,9 @@ export class Article {
   categories: Category[];
 
   @Prop({
-    type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   })
-  auteur: User;
+  auteurs: User[];
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commentaire' }],

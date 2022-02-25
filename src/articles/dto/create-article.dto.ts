@@ -12,7 +12,7 @@ export class CreateArticleDto {
   dateArchivage?: Date;
   dateAlaUne?: Date;
   icon: string;
-  categories: CreateCategoryDto[];
+  categories: any[];
   commentaires?: CommentaireDto[];
   auteur: CreateUserDto;
 }

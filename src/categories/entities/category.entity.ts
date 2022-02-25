@@ -8,9 +8,9 @@ export type CategoryDocument = Category & Document;
 
 @Schema()
 export class Category {
-  @Prop()
+  @Prop({ unique: true })
   title: string;
-  @Prop()
+  @Prop({ unique: true })
   libelles: string;
   @Prop()
   description: string;

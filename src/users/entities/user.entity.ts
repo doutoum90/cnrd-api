@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
-import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
+import { Article } from 'src/articles/entities/article.entity';
 
 export type UserDocument = User & Document;
 
@@ -35,9 +35,9 @@ export class User {
   dateModification?: Date;
 
   @Prop({
-    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
+    type: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
   })
-  articles: CreateArticleDto[];
+  article: Article;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
