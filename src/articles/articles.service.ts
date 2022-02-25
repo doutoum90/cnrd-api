@@ -83,6 +83,9 @@ export class ArticlesService {
     const options = { isAlaUne: { $in: ['true', true] } };
     const data = await this.articleModel
       .find(options)
+      .populate('auteur')
+      .populate('commentaires')
+      .populate('categories')
       .limit(pagination.limit)
       .skip(pagination.page_size * (pagination.offset - 1));
     const total = await this.articleModel.count(options).exec();
@@ -98,6 +101,9 @@ export class ArticlesService {
     const options = { isArchived: { $in: ['true', true] } };
     const data = await this.articleModel
       .find(options)
+      .populate('auteur')
+      .populate('commentaires')
+      .populate('categories')
       .limit(pagination.limit)
       .skip(pagination.page_size * (pagination.offset - 1))
       .exec();
@@ -113,6 +119,9 @@ export class ArticlesService {
     const options = { isArchived: { $in: ['false', false, undefined] } };
     const data = await this.articleModel
       .find(options)
+      .populate('auteur')
+      .populate('commentaires')
+      .populate('categories')
       .limit(pagination.limit)
       .skip(pagination.page_size * (pagination.offset - 1))
       .exec();
@@ -130,6 +139,9 @@ export class ArticlesService {
       .find()
       .limit(pagination.limit)
       .skip(pagination.page_size * (pagination.offset - 1))
+      .populate('auteur')
+      .populate('commentaires')
+      .populate('categories')
       .exec();
     const total = await this.articleModel.count().populate('categories').exec();
     return {
