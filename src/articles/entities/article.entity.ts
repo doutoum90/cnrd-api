@@ -1,9 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
-import { CreateCategoryDto } from 'src/categories/dto/create-category.dto';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
-import { CommentaireDto, CreateArticleDto } from '../dto/create-article.dto';
+import { Category } from 'src/categories/entities/category.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export type ArticleDocument = Article & Document;
 export type CommentaireDocument = Commentaire & Document;
@@ -30,22 +29,20 @@ export class Article {
   dateAlaUne?: Date;
   @Prop()
   icon: string;
-  @Prop()
-  documents?: any[];
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Category' }],
   })
-  categories: CreateCategoryDto[];
+  categories: Category[];
 
   @Prop({
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   })
-  auteur: CreateUserDto;
+  auteur: User;
 
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Commentaire' }],
   })
-  commentaires?: CommentaireDto[];
+  commentaires?: Commentaire[];
 }
 @Schema()
 export class Commentaire {
@@ -60,7 +57,7 @@ export class Commentaire {
   @Prop({
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'Article' },
   })
-  article: CreateArticleDto;
+  article: Article;
 }
 
 export const CommentaireSchema = SchemaFactory.createForClass(Commentaire);

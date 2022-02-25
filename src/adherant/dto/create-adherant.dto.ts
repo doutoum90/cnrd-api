@@ -1,5 +1,4 @@
 export class CreateAdherantDto {
-  _id: string;
   nom: string;
   prenom: string;
   dateNaissance: Date;

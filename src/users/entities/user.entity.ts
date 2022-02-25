@@ -7,7 +7,6 @@ export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-  id: string;
   @Prop()
   nom: string;
   @Prop()
@@ -34,7 +33,7 @@ export class User {
   photo?: string;
   @Prop()
   dateModification?: Date;
-  
+
   @Prop({
     type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Article' }],
   })

@@ -2,6 +2,7 @@ import { Prop, raw, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose from 'mongoose';
 import { Document } from 'mongoose';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
+import { User } from 'src/users/entities/user.entity';
 
 export type CategoryDocument = Category & Document;
 
@@ -24,7 +25,7 @@ export class Category {
   @Prop({
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   })
-  auteur: CreateUserDto;
+  users: User;
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);

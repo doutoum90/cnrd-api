@@ -15,13 +15,8 @@ import {
   CategoryDocument,
 } from 'src/categories/entities/category.entity';
 import { User, UserDocument } from 'src/users/entities/user.entity';
-
 @Injectable()
 export class ArticlesService {
-  /*
-  { name: Category.name, schema: CategorySchema },
-      { name: User.name, schema: UserSchema },
-  */
   constructor(
     @InjectModel(Article.name)
     private readonly articleModel: Model<ArticleDocument>,
@@ -40,14 +35,14 @@ export class ArticlesService {
     createArticleDto.categories.map(async (cat) =>
       newArticle.categories.push(await this.categoryModel.findById(cat)),
     );
-    // set autor
-    const auteur = await this.userModel.findById(createArticleDto.auteur);
-    auteur.articles.push(newArticle);
-    auteur.save();
-    console.log(auteur);
+    // set auteur
+    const auteur = await this.userModel
+      .findOne({ _id: createArticleDto?.auteur })
+      .exec();
 
-    newArticle.auteur = auteur._id;
-    console.log(newArticle);
+    console.log('auteur', auteur);
+    newArticle.auteur = auteur?._id;
+    console.log('auteur', newArticle.auteur);
     return newArticle.save();
   }
 
@@ -153,10 +148,6 @@ export class ArticlesService {
   }
 
   findOne(id: string) {
-    this.articleModel
-      .findById(id)
-      .populate('auteur')
-      .exec((e, d) => console.log(e, d.auteur));
     return this.articleModel
       .findById(id)
       .populate('auteur')
@@ -165,6 +156,7 @@ export class ArticlesService {
   }
 
   update(id: string, updateArticleDto: UpdateArticleDto) {
+    console.log(updateArticleDto);
     return this.articleModel.findByIdAndUpdate(id, updateArticleDto).exec();
   }
 

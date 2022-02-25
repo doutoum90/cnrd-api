@@ -32,7 +32,7 @@ export class ArticlesController {
     return this.articlesService.findByKeyWord(term, pagination);
   }
 
-  @Patch(':id')
+  @Patch('comments/:id')
   async comment(@Param('id') id: string, @Body() comm: any) {
     return await this.articlesService.comment(id, comm);
   }

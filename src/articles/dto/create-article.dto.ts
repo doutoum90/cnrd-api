@@ -12,7 +12,6 @@ export class CreateArticleDto {
   dateArchivage?: Date;
   dateAlaUne?: Date;
   icon: string;
-  documents?: any[];
   categories: CreateCategoryDto[];
   commentaires?: CommentaireDto[];
   auteur: CreateUserDto;

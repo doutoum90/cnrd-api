@@ -8,6 +8,5 @@ export class CreateCategoryDto {
   dateArchivage?: Date;
   isArchived: boolean;
   dateModification?: Date;
-  idUser: string;
-  auteur: CreateUserDto;
+  users: CreateUserDto;
 }
