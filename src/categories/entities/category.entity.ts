@@ -23,9 +23,9 @@ export class Category {
   @Prop()
   dateModification?: Date;
   @Prop({
-    type: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    type: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   })
-  users: User;
+  author: User[];
 }
 
 export const CategorySchema = SchemaFactory.createForClass(Category);
