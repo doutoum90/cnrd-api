@@ -53,6 +53,17 @@ export class ArticlesService {
     return await article.save();
   }
 
+  async findConnexeArticle(articleId: string, categoryIds: string[]) {
+    const options = {
+      _id: { $ne: articleId },
+      categories: { $in: categoryIds },
+    };
+    return await this.articleModel
+      .find(options)
+      .populate('auteurs')
+      .populate('commentaires')
+      .populate('categories');
+  }
   async findByKeyWord(searchQuery: string, pagination: Pagination) {
     const options = {
       $or: [
@@ -62,7 +73,6 @@ export class ArticlesService {
     };
     return await this.getArticleBulk(options, pagination);
   }
-  
   async getArticleByCat(id, pagination) {
     const options = {
       categories: id,
@@ -96,8 +106,17 @@ export class ArticlesService {
       .populate('categories');
   }
 
-  update(id: string, updateArticleDto: UpdateArticleDto) {
-    return this.articleModel.findByIdAndUpdate(id, updateArticleDto).exec();
+  async update(id: string, updateArticleDto: UpdateArticleDto) {
+    await this.articleModel.findByIdAndUpdate(id, { auteurs: [] });
+    const aut = await this.userModel.findById(updateArticleDto.auteur);
+    const data = {
+      ...updateArticleDto,
+      auteurs: aut,
+      categories: await this.categoryModel.find({
+        _id: { $in: updateArticleDto.categories },
+      }),
+    };
+    return await this.articleModel.findByIdAndUpdate(id, data).exec();
   }
 
   remove(_id: string) {

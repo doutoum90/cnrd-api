@@ -31,6 +31,11 @@ export class ArticlesController {
     const pagination: Pagination = JSON.parse(headers.pagination);
     return this.articlesService.findByKeyWord(term, pagination);
   }
+  @Get('connexes/:id')
+  async findConnexeArticle(@Param('id') id: string, @Headers() headers: any) {
+    const categoryids: string[] = JSON.parse(headers.categoryids);
+    return this.articlesService.findConnexeArticle(id, categoryids);
+  }
 
   @Patch('comments/:id')
   async comment(@Param('id') id: string, @Body() comm: any) {
